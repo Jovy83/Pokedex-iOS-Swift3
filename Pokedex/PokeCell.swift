@@ -18,14 +18,12 @@ class PokeCell: UICollectionViewCell {
     var pokemon: Pokemon!
     
     //MARK: METHODS
-    
     // You can either use awakeFromNib or required init? for the initialization of this cell
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         layer.cornerRadius = 5.0
     }
-    
+
 //    override func awakeFromNib() {
 //        layer.cornerRadius = 5.0
 //    }

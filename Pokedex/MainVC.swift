@@ -11,14 +11,17 @@ import AVFoundation // needed for audio stuff
 
 class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
+    //MARK:- OUTLETS
     @IBOutlet weak var collection: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    //MARK:- PROPERTIES
     var pokemons = [Pokemon]()
     var filteredPokemons = [Pokemon]()
     var inSearchMode = false
     var musicPlayer: AVAudioPlayer!
 
+    //MARK:- DEFAULT FUNCTIONS
     override func viewDidLoad() {
         super.viewDidLoad()
 
