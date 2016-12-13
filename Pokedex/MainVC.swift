@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainVC.swift
 //  Pokedex
 //
 //  Created by MacTesterSierra on 12/11/16.
@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation // needed for audio stuff
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
+class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
     @IBOutlet weak var collection: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -108,6 +108,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         // called when an item in the collection is tapped
         
         view.endEditing(true) // dismiss the keyboard from the screen
+        
+        var pokemon: Pokemon!
+        
+        if inSearchMode
+        {
+            pokemon = filteredPokemons[indexPath.row]
+        }
+        else
+        {
+            pokemon = pokemons[indexPath.row]
+        }
+        
+        performSegue(withIdentifier: "PokemonDetailVC", sender: pokemon)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -177,6 +190,20 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         {
             musicPlayer.play()
             sender.alpha = 1.0 // restore it back to 1.0 when playing
+        }
+    }
+    
+    //MARK: - SEGUE
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PokemonDetailVC"
+        {
+            if let detailVC = segue.destination as? PokemonDetailVC
+            {
+                if let pokemon = sender as? Pokemon
+                {
+                    detailVC.pokemon = pokemon
+                }
+            }
         }
     }
 }
