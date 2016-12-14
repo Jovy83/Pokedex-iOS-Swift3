@@ -32,11 +32,57 @@ class PokemonDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nameLbl.text = pokemon.name
-
+        // these are parsed from the csv file
+        nameLbl.text = pokemon.name.capitalized
+        let img = UIImage(named: "\(pokemon.pokedexId)")
+        mainImg.image = img
+        currentEvoImg.image = img
+        pokedexIdLbl.text = "\(pokemon.pokedexId)"
+        
+        pokemon.downloadPokemonDetails(completed: { (success) in
+            // whatever we write here will only be called after the network call is complete
+            if success
+            {
+                // always update UI in the main thread.
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+                
+            }
+            else
+            {
+                print("FAILED: TO PARSE JSON DATA")
+            }
+        })
     }
     
     //MARK:- MY FUNCTIONS
+    func updateUI()
+    {
+        attackLbl.text = pokemon.attack
+        defenseLbl.text = pokemon.defense
+        heightLbl.text = pokemon.height
+        weightLbl.text = pokemon.weight
+        typeLbl.text = pokemon.type
+        descriptionLbl.text = pokemon.description
+        
+        if pokemon.nextEvolutionId == ""
+        {
+            evoLbl.text = "No Evolutions"
+            nextEvoImg.isHidden = true
+        }
+        else if !pokemon.isEvolutionLevelBased
+        {
+            evoLbl.text = "Pokemon has complex evolution/s that's not level based"
+            nextEvoImg.isHidden = true
+        }
+        else
+        {
+            evoLbl.text = "Next Evolution: \(pokemon.nextEvolutionName) - LVL \(pokemon.nextEvolutionLevel)"
+            nextEvoImg.isHidden = false
+            nextEvoImg.image = UIImage(named: pokemon.nextEvolutionId)
+        }
+    }
     
     //MARK:- ACTIONS
     @IBAction func backBtnPressed(_ sender: AnyObject) {
